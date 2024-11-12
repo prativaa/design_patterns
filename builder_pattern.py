@@ -27,12 +27,7 @@ class Builder(ABC):
 # 2. Concrete Builder: A concrete builder class implements the builder interface and provides specific implementations for each building step.
 class CarBuilder(Builder):
     def __init__(self):
-        # self.car = Car()
         self.reset()
-        # self.set_seats = None
-        # self.set_engine = None
-        # self.set_trip_computer = None
-        # self.set_gps = None
 
     def reset(self):
         self.car = Car()
@@ -70,12 +65,7 @@ class Car:
 
 class CarManualBuilder(Builder):
     def __init__(self):
-        # self.manual = Manual()
         self.reset()
-        # self.set_seats()
-        # self.set_engine = []
-        # self.set_trip_computer = None
-        # self.set_gps = None
 
     def reset(self):
         self.manual = Manual()
@@ -109,30 +99,37 @@ class Manual:
         self.gps = None
 
     def __str__(self):
-        return f"Manual(seats={self.seats}, engine={self.engine}, trip_computer={self.trip_computer}, gps={self.gps})"
+        return f"Car Manual(seats={self.seats}, engine={self.engine}, trip_computer={self.trip_computer}, gps={self.gps})"
 # 3. Director: The director class defines the order in which to execute the building steps
 # It may encapsulate various ways to construct a product using the same builder object.
 class Director:
     def __init__(self, builder: Builder):
         self.builder = builder
 
-    def construct(self):
+    def constructSportsCar(self):
         self.builder.reset()
         self.builder.set_seats(2)
         self.builder.set_engine("V8")
         self.builder.set_trip_computer(True)
         self.builder.set_gps(True)
 
+    def constructSUV(self):
+        self.builder.reset()
+        self.builder.set_seats(4)
+        self.builder.set_engine("v1")
+        self.builder.set_trip_computer(True)
+        self.builder.set_gps(True)
+
 # 4. Client Code: The client code creates both the builder and the director objects. Before construction starts, the client must pass a builder object to the director.
 builder = CarBuilder()
 car_director = Director(builder)
-car_director.construct()
+car_director.constructSportsCar()
 
 car = builder.get_result()
 
 manual = CarManualBuilder()
-director = Director(manual)
-director.construct()
+manual_director = Director(manual)
+manual_director.constructSUV()
 
 car_manual = manual.get_result()
 print(car)
